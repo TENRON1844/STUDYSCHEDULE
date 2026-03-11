@@ -33,7 +33,7 @@
     body.theme-pastel{
       --bg:#fff4fb;
       --bg2:#f4f7ff;
-      --card:rgba(255,255,255,0.7);
+      --card:rgba(255,255,255,0.72);
       --card-border:rgba(177,156,217,0.25);
       --text:#332b52;
       --muted:#7a7197;
@@ -41,21 +41,12 @@
       --accent:#d59bf6;
       --accent-2:#7ed7c1;
       --accent-3:#8fb8ff;
-      --status-not-bg: rgba(255, 118, 117, 0.12);
-      --status-not-border: rgba(255, 118, 117, 0.35);
-      --status-not-text: #c25b5b;
-      --status-progress-bg: rgba(255, 190, 92, 0.16);
-      --status-progress-border: rgba(255, 190, 92, 0.35);
-      --status-progress-text: #9a6a10;
-      --status-complete-bg: rgba(126, 215, 193, 0.16);
-      --status-complete-border: rgba(126, 215, 193, 0.35);
-      --status-complete-text: #257a68;
     }
 
     body.theme-beige{
       --bg:#f6f0e8;
       --bg2:#efe7db;
-      --card:rgba(255,255,255,0.6);
+      --card:rgba(255,255,255,0.64);
       --card-border:rgba(120,94,62,0.12);
       --text:#2f2418;
       --muted:#786857;
@@ -63,21 +54,12 @@
       --accent:#b08968;
       --accent-2:#7f9c96;
       --accent-3:#9bb3c9;
-      --status-not-bg: rgba(196, 93, 93, 0.10);
-      --status-not-border: rgba(196, 93, 93, 0.28);
-      --status-not-text: #9d4747;
-      --status-progress-bg: rgba(210, 159, 72, 0.12);
-      --status-progress-border: rgba(210, 159, 72, 0.30);
-      --status-progress-text: #8a6217;
-      --status-complete-bg: rgba(90, 150, 120, 0.12);
-      --status-complete-border: rgba(90, 150, 120, 0.30);
-      --status-complete-text: #3e7258;
     }
 
     body.theme-neon{
       --bg:#050816;
       --bg2:#0b1330;
-      --card:rgba(18,23,54,0.72);
+      --card:rgba(18,23,54,0.74);
       --card-border:rgba(0,255,255,0.12);
       --text:#ecfeff;
       --muted:#9cd7dd;
@@ -85,15 +67,6 @@
       --accent:#00f5ff;
       --accent-2:#7c3aed;
       --accent-3:#22c55e;
-      --status-not-bg: rgba(255, 0, 98, 0.12);
-      --status-not-border: rgba(255, 0, 98, 0.45);
-      --status-not-text: #ff9bc6;
-      --status-progress-bg: rgba(255, 191, 0, 0.14);
-      --status-progress-border: rgba(255, 191, 0, 0.42);
-      --status-progress-text: #ffe08a;
-      --status-complete-bg: rgba(34, 197, 94, 0.14);
-      --status-complete-border: rgba(34, 197, 94, 0.45);
-      --status-complete-text: #bbf7d0;
     }
 
     *{box-sizing:border-box}
@@ -368,14 +341,104 @@
 
     .today-title{ font-weight:700; }
 
-    .toolbar{
+    .square-bar{
       display:grid;
-      grid-template-columns:1fr auto auto;
+      grid-template-columns:repeat(auto-fit, minmax(120px, 1fr));
       gap:12px;
-      padding:16px;
-      border-radius:22px;
       margin-bottom:20px;
-      align-items:center;
+    }
+
+    .square-tile{
+      min-height:110px;
+      border-radius:22px;
+      padding:14px;
+      cursor:pointer;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.1);
+      transition:.18s ease;
+    }
+
+    .square-tile:hover{
+      transform:translateY(-2px);
+    }
+
+    .square-kicker{
+      font-size:.76rem;
+      color:var(--muted);
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+    }
+
+    .square-title{
+      font-size:1rem;
+      font-weight:800;
+      line-height:1.2;
+    }
+
+    .square-sub{
+      font-size:.82rem;
+      color:var(--muted);
+    }
+
+    .editor-panel{
+      display:none;
+      margin-top:12px;
+      padding:16px;
+      border-radius:20px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.1);
+    }
+
+    .editor-panel.show{
+      display:block;
+    }
+
+    .editor-grid{
+      display:grid;
+      gap:10px;
+    }
+
+    .editor-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+
+    .achievement-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));
+      gap:12px;
+      margin-bottom:20px;
+    }
+
+    .achievement-task-list{
+      max-height:260px;
+      overflow:auto;
+      display:grid;
+      gap:8px;
+    }
+
+    .achievement-task{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding:8px 10px;
+      border-radius:12px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+      font-size:.9rem;
+    }
+
+    .toolbar{
+      display:flex;
+      gap:12px;
+      margin-bottom:20px;
+      flex-wrap:wrap;
     }
 
     select, button, input[type="number"], input[type="text"], input[type="color"]{
@@ -402,67 +465,8 @@
       background:rgba(239,68,68,.15);
       color:#fecaca;
       border:1px solid rgba(239,68,68,.35);
-      padding:8px 10px;
+      padding:10px 12px;
       width:auto;
-    }
-
-    .subjects-panel, .achievements-panel{
-      border-radius:24px;
-      padding:18px;
-      margin-bottom:20px;
-    }
-
-    .subjects-grid, .achievements-grid{
-      display:grid;
-      gap:12px;
-    }
-
-    .subject-card, .achievement-card{
-      padding:14px;
-      border-radius:18px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.1);
-    }
-
-    .subject-card{
-      display:grid;
-      grid-template-columns:1.2fr 130px auto;
-      gap:10px;
-      align-items:center;
-    }
-
-    .achievement-top{
-      display:grid;
-      grid-template-columns:1fr auto;
-      gap:10px;
-      align-items:center;
-      margin-bottom:12px;
-    }
-
-    .achievement-tasks{
-      max-height:220px;
-      overflow:auto;
-      display:grid;
-      gap:8px;
-      padding-right:6px;
-    }
-
-    .achievement-task{
-      display:flex;
-      gap:10px;
-      align-items:flex-start;
-      padding:8px 10px;
-      border-radius:12px;
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08);
-      font-size:.9rem;
-    }
-
-    .achievement-status{
-      margin-top:10px;
-      color:var(--muted);
-      font-size:.85rem;
-      font-weight:700;
     }
 
     .focus-banner{
@@ -513,6 +517,11 @@
       display:grid;
       grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
       gap:14px;
+    }
+
+    .days.single-focus{
+      grid-template-columns:minmax(280px, 520px);
+      justify-content:center;
     }
 
     .day{
@@ -715,6 +724,14 @@
       font-size:.88rem;
     }
 
+    .hide-in-focus{
+      display:block;
+    }
+
+    body.focus-mode .hide-in-focus{
+      display:none !important;
+    }
+
     .footer{
       margin:20px 0 8px;
       text-align:center;
@@ -724,12 +741,10 @@
 
     @media (max-width: 1100px){
       .hero,.top-grid{grid-template-columns:1fr}
-      .toolbar,.subject-card{grid-template-columns:1fr}
     }
 
     @media (max-width: 640px){
       .wrap{padding:16px}
-      .toolbar{grid-template-columns:1fr}
       .count-grid{grid-template-columns:repeat(2,1fr)}
       .timer-grid{grid-template-columns:1fr}
       .hero-mini{grid-template-columns:1fr}
@@ -740,7 +755,7 @@
 </head>
 <body>
   <div class="wrap">
-    <section class="hero glass">
+    <section class="hero glass hide-in-focus">
       <div>
         <div class="eyebrow">5-week exam study planner</div>
         <h1>Study Planner</h1>
@@ -789,14 +804,14 @@
       </div>
     </section>
 
-    <section class="top-grid">
+    <section class="top-grid hide-in-focus">
       <div class="today-card glass">
         <h2 class="section-title">Today</h2>
         <p class="section-sub">A quick focus view for the current study day.</p>
         <div class="today-list" id="todayList"></div>
       </div>
 
-      <div class="side-panel glass">
+      <div class="side-panel glass" id="motivationPanel">
         <h2 class="section-title">Focus & motivation</h2>
         <div class="motiv-box" style="margin-bottom:14px;">
           <div class="quote" id="quoteText">You are building certainty one task at a time.</div>
@@ -820,55 +835,54 @@
       </div>
     </section>
 
-    <section class="subjects-panel glass">
-      <h2 class="section-title">Subjects</h2>
-      <p class="section-sub">Rename subjects and change their colors. Tasks update automatically.</p>
-      <div class="subjects-grid" id="subjectsGrid"></div>
+    <section class="glass hide-in-focus" style="padding:18px; border-radius:24px; margin-bottom:20px;">
+      <h2 class="section-title">Settings</h2>
+      <p class="section-sub">Click a square to edit it.</p>
+
+      <div class="square-bar" id="settingsSquares"></div>
+
+      <div class="editor-panel" id="themeEditor"></div>
+      <div class="editor-panel" id="subjectEditor"></div>
     </section>
 
-    <section class="achievements-panel glass">
+    <section class="glass hide-in-focus" style="padding:18px; border-radius:24px; margin-bottom:20px;">
       <div style="display:flex; justify-content:space-between; gap:12px; align-items:center; flex-wrap:wrap;">
         <div>
           <h2 class="section-title" style="margin-bottom:4px;">Achievements</h2>
-          <p class="section-sub" style="margin:0;">Rename achievements and choose exactly which tasks belong to each one.</p>
+          <p class="section-sub" style="margin:0;">Click a square to edit its name and choose which tasks belong to it.</p>
         </div>
         <button class="btn-accent" id="addAchievement">+ Add achievement</button>
       </div>
-      <div class="achievements-grid" id="achievementsGrid" style="margin-top:14px;"></div>
+
+      <div class="achievement-grid" id="achievementSquares" style="margin-top:14px;"></div>
+      <div class="editor-panel" id="achievementEditor"></div>
     </section>
 
     <div class="focus-banner" id="focusBanner">
       <div>
         <strong>Focus mode is on.</strong>
-        <span id="focusText" style="color:var(--muted); margin-left:6px;">Showing the current study day only.</span>
+        <span style="color:var(--muted); margin-left:6px;">Showing only the current study day.</span>
       </div>
       <button class="btn-soft" id="exitFocus">Exit focus</button>
     </div>
 
-    <section class="toolbar glass">
-      <select id="themeSwitch">
-        <option value="dark">Dark theme</option>
-        <option value="pastel">Pastel theme</option>
-        <option value="beige">Beige theme</option>
-        <option value="neon">Neon theme</option>
-      </select>
-      <button class="btn-soft" id="showAll">Show all</button>
-      <button class="btn-soft" id="collapseAchievements">Collapse achievements</button>
-    </section>
+    <div class="toolbar">
+      <button class="btn-soft hide-in-focus" id="showAll">Show all</button>
+    </div>
 
     <section id="board" class="board"></section>
 
-    <p class="footer">Tasks, achievements, colors, and edits save automatically in your browser.</p>
+    <p class="footer">Tasks, subjects, colors, and achievements save automatically in your browser.</p>
   </div>
 
   <script>
     const examDate = new Date("2026-04-27T09:00:00");
-    const STORAGE_KEY = "studyPlannerEditableAchievementsV1";
-    const THEME_KEY = "studyPlannerThemeV2";
-    const FOCUS_KEY = "studyPlannerFocusV2";
-    const TIMER_KEY = "studyPlannerTimerV2";
-    const SUBJECTS_KEY = "studyPlannerSubjectsV1";
-    const ACHIEVEMENTS_KEY = "studyPlannerAchievementsV1";
+    const STORAGE_KEY = "studyPlannerEditableAchievementsV2";
+    const THEME_KEY = "studyPlannerThemeV3";
+    const FOCUS_KEY = "studyPlannerFocusV3";
+    const TIMER_KEY = "studyPlannerTimerV3";
+    const SUBJECTS_KEY = "studyPlannerSubjectsV2";
+    const ACHIEVEMENTS_KEY = "studyPlannerAchievementsV2";
 
     const quotes = [
       "You are building certainty one task at a time.",
@@ -1130,7 +1144,6 @@
         id: uid(),
         name: g.name,
         taskIds: tasks.filter(g.match).map(t => t.id),
-        collapsed: false
       }));
     }
 
@@ -1147,6 +1160,9 @@
     let draggedTask = null;
     let focusMode = localStorage.getItem(FOCUS_KEY) || "all";
     let achievements = loadAchievements(data.flatMap(w => w.days.flatMap(d => d.tasks)));
+    let openSubjectId = null;
+    let openAchievementId = null;
+    let openThemeEditor = false;
 
     function saveData(){
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -1171,7 +1187,8 @@
 
     function hexToRgba(hex, alpha){
       const clean = hex.replace("#","");
-      const bigint = parseInt(clean.length === 3 ? clean.split("").map(c=>c+c).join("") : clean, 16);
+      const full = clean.length === 3 ? clean.split("").map(c=>c+c).join("") : clean;
+      const bigint = parseInt(full, 16);
       const r = (bigint >> 16) & 255;
       const g = (bigint >> 8) & 255;
       const b = bigint & 255;
@@ -1226,7 +1243,7 @@
             <span>${subject.name}</span>
             <span>${done}/${subjectTasks.length}</span>
           </div>
-          <div class="tiny-track"><div class="tiny-fill" style="width:${pct}%; background:linear-gradient(90deg, ${subject.color}, ${subject.color});"></div></div>
+          <div class="tiny-track"><div class="tiny-fill" style="width:${pct}%; background:${subject.color};"></div></div>
         `;
         subjectProgress.appendChild(row);
       });
@@ -1324,70 +1341,107 @@
       localStorage.setItem(THEME_KEY, theme);
     }
 
-    function renderSubjectsManager(){
-      const grid = document.getElementById("subjectsGrid");
-      grid.innerHTML = "";
+    function renderSettingsSquares(){
+      const wrap = document.getElementById("settingsSquares");
+      const themeEditor = document.getElementById("themeEditor");
+      const subjectEditor = document.getElementById("subjectEditor");
+      wrap.innerHTML = "";
+
+      const themeTile = document.createElement("div");
+      themeTile.className = "square-tile";
+      themeTile.innerHTML = `
+        <div class="square-kicker">Theme</div>
+        <div class="square-title">Appearance</div>
+        <div class="square-sub">Change theme</div>
+      `;
+      themeTile.addEventListener("click", () => {
+        openThemeEditor = !openThemeEditor;
+        openSubjectId = null;
+        renderSettingsSquares();
+      });
+      wrap.appendChild(themeTile);
 
       subjects.forEach(subject => {
-        const card = document.createElement("div");
-        card.className = "subject-card";
-        card.innerHTML = `
-          <input type="text" value="${subject.name}" />
-          <input type="color" value="${subject.color}" />
-          <button class="btn-delete">Delete</button>
+        const tile = document.createElement("div");
+        tile.className = "square-tile";
+        tile.style.borderColor = hexToRgba(subject.color, .45);
+        tile.innerHTML = `
+          <div class="square-kicker">Subject</div>
+          <div class="square-title" style="color:${subject.color};">${subject.name}</div>
+          <div class="square-sub">Edit name & color</div>
         `;
+        tile.addEventListener("click", () => {
+          openSubjectId = openSubjectId === subject.id ? null : subject.id;
+          openThemeEditor = false;
+          renderSettingsSquares();
+        });
+        wrap.appendChild(tile);
+      });
 
-        const nameInput = card.querySelector('input[type="text"]');
-        const colorInput = card.querySelector('input[type="color"]');
-        const deleteBtn = card.querySelector('button');
+      themeEditor.className = `editor-panel ${openThemeEditor ? "show" : ""}`;
+      themeEditor.innerHTML = openThemeEditor ? `
+        <div class="editor-grid">
+          <label>Theme</label>
+          <select id="themeSelectEditor">
+            <option value="dark">Dark theme</option>
+            <option value="pastel">Pastel theme</option>
+            <option value="beige">Beige theme</option>
+            <option value="neon">Neon theme</option>
+          </select>
+        </div>
+      ` : "";
 
-        nameInput.addEventListener("input", () => {
+      if(openThemeEditor){
+        const theme = localStorage.getItem(THEME_KEY) || "dark";
+        const sel = document.getElementById("themeSelectEditor");
+        sel.value = theme;
+        sel.addEventListener("change", e => {
+          applyTheme(e.target.value);
+          render();
+        });
+      }
+
+      const subject = subjects.find(s => s.id === openSubjectId);
+      subjectEditor.className = `editor-panel ${subject ? "show" : ""}`;
+      subjectEditor.innerHTML = subject ? `
+        <div class="editor-grid">
+          <label>Subject name</label>
+          <input type="text" id="subjectNameEdit" value="${subject.name}">
+          <label>Color</label>
+          <input type="color" id="subjectColorEdit" value="${subject.color}">
+        </div>
+        <div class="editor-actions">
+          <button class="btn-accent" id="saveSubjectEdit">Save</button>
+          <button class="btn-delete" id="deleteSubjectEdit">Delete subject</button>
+        </div>
+      ` : "";
+
+      if(subject){
+        document.getElementById("saveSubjectEdit").addEventListener("click", () => {
           const oldName = subject.name;
-          subject.name = nameInput.value.trim() || oldName;
-
+          subject.name = document.getElementById("subjectNameEdit").value.trim() || oldName;
+          subject.color = document.getElementById("subjectColorEdit").value;
           getAllTasks().forEach(task => {
             if(task.subject === oldName) task.subject = subject.name;
           });
-
           saveSubjects();
           saveData();
           render();
         });
 
-        colorInput.addEventListener("input", () => {
-          subject.color = colorInput.value;
-          saveSubjects();
-          render();
-        });
-
-        deleteBtn.addEventListener("click", () => {
+        document.getElementById("deleteSubjectEdit").addEventListener("click", () => {
           if(subjects.length <= 1) return;
           const fallback = subjects.find(s => s.id !== subject.id);
           getAllTasks().forEach(task => {
             if(task.subject === subject.name) task.subject = fallback.name;
           });
           subjects = subjects.filter(s => s.id !== subject.id);
+          openSubjectId = null;
           saveSubjects();
           saveData();
           render();
         });
-
-        grid.appendChild(card);
-      });
-
-      const addBtn = document.createElement("button");
-      addBtn.className = "btn-accent";
-      addBtn.textContent = "+ Add subject";
-      addBtn.addEventListener("click", () => {
-        subjects.push({
-          id: uid(),
-          name: `Subject ${subjects.length + 1}`,
-          color: "#94a3b8"
-        });
-        saveSubjects();
-        render();
-      });
-      grid.appendChild(addBtn);
+      }
     }
 
     function achievementProgress(achievement){
@@ -1396,53 +1450,61 @@
       return { total: tasks.length, done };
     }
 
-    function renderAchievements(){
-      const grid = document.getElementById("achievementsGrid");
-      grid.innerHTML = "";
-      const allTasks = getAllTasks();
+    function renderAchievementSquares(){
+      const wrap = document.getElementById("achievementSquares");
+      const editor = document.getElementById("achievementEditor");
+      wrap.innerHTML = "";
 
       achievements.forEach(achievement => {
-        const { total, done } = achievementProgress(achievement);
-        const complete = total > 0 && total === done;
+        const prog = achievementProgress(achievement);
+        const done = prog.total > 0 && prog.done === prog.total;
 
-        const card = document.createElement("div");
-        card.className = "achievement-card";
-        card.innerHTML = `
-          <div class="achievement-top">
-            <input type="text" value="${achievement.name}" />
-            <button class="btn-delete">Delete</button>
+        const tile = document.createElement("div");
+        tile.className = "square-tile";
+        tile.style.borderColor = done ? "rgba(52,211,153,.45)" : "rgba(255,255,255,.1)";
+        tile.innerHTML = `
+          <div class="square-kicker">Achievement</div>
+          <div class="square-title">${achievement.name}</div>
+          <div class="square-sub">${prog.done}/${prog.total} complete ${done ? "🏆" : ""}</div>
+        `;
+        tile.addEventListener("click", () => {
+          openAchievementId = openAchievementId === achievement.id ? null : achievement.id;
+          renderAchievementSquares();
+        });
+        wrap.appendChild(tile);
+      });
+
+      const achievement = achievements.find(a => a.id === openAchievementId);
+      editor.className = `editor-panel ${achievement ? "show" : ""}`;
+      editor.innerHTML = "";
+
+      if(achievement){
+        const tasks = getAllTasks();
+        editor.innerHTML = `
+          <div class="editor-grid">
+            <label>Achievement name</label>
+            <input type="text" id="achievementNameEdit" value="${achievement.name}">
+            <label>Tasks in this achievement</label>
+            <div class="achievement-task-list" id="achievementTaskList"></div>
           </div>
-          <div class="achievement-tasks"></div>
-          <div class="achievement-status">${done}/${total} tasks complete ${complete ? "🏆" : ""}</div>
+          <div class="editor-actions">
+            <button class="btn-accent" id="saveAchievementEdit">Save</button>
+            <button class="btn-delete" id="deleteAchievementEdit">Delete achievement</button>
+          </div>
         `;
 
-        const nameInput = card.querySelector('input[type="text"]');
-        const deleteBtn = card.querySelector('button');
-        const tasksWrap = card.querySelector('.achievement-tasks');
-
-        nameInput.addEventListener("input", () => {
-          achievement.name = nameInput.value.trim() || "Untitled achievement";
-          saveAchievements();
-        });
-
-        deleteBtn.addEventListener("click", () => {
-          achievements = achievements.filter(a => a.id !== achievement.id);
-          saveAchievements();
-          render();
-        });
-
-        allTasks.forEach(task => {
+        const list = document.getElementById("achievementTaskList");
+        tasks.forEach(task => {
           const row = document.createElement("label");
           row.className = "achievement-task";
           row.innerHTML = `
-            <input type="checkbox" ${achievement.taskIds.includes(task.id) ? "checked" : ""} />
+            <input type="checkbox" ${achievement.taskIds.includes(task.id) ? "checked" : ""}>
             <div>
               <div style="font-weight:700;">${task.title}</div>
               <div style="color:var(--muted); font-size:.82rem;">${task.subject}</div>
             </div>
           `;
-
-          const checkbox = row.querySelector('input');
+          const checkbox = row.querySelector("input");
           checkbox.addEventListener("change", () => {
             if(checkbox.checked){
               if(!achievement.taskIds.includes(task.id)) achievement.taskIds.push(task.id);
@@ -1450,20 +1512,35 @@
               achievement.taskIds = achievement.taskIds.filter(id => id !== task.id);
             }
             saveAchievements();
-            renderAchievements();
+            renderAchievementSquares();
           });
-
-          tasksWrap.appendChild(row);
+          list.appendChild(row);
         });
 
-        grid.appendChild(card);
-      });
+        document.getElementById("saveAchievementEdit").addEventListener("click", () => {
+          achievement.name = document.getElementById("achievementNameEdit").value.trim() || "Untitled achievement";
+          saveAchievements();
+          renderAchievementSquares();
+        });
+
+        document.getElementById("deleteAchievementEdit").addEventListener("click", () => {
+          achievements = achievements.filter(a => a.id !== achievement.id);
+          openAchievementId = null;
+          saveAchievements();
+          renderAchievementSquares();
+        });
+      }
     }
 
     function renderFocusBanner(){
       const banner = document.getElementById("focusBanner");
-      if(focusMode === "today") banner.classList.add("show");
-      else banner.classList.remove("show");
+      if(focusMode === "today"){
+        banner.classList.add("show");
+        document.body.classList.add("focus-mode");
+      } else {
+        banner.classList.remove("show");
+        document.body.classList.remove("focus-mode");
+      }
     }
 
     function render(){
@@ -1485,7 +1562,7 @@
               <div class="week-meta">${visibleDays.length} visible day${visibleDays.length === 1 ? "" : "s"}</div>
             </div>
           </div>
-          <div class="days"></div>
+          <div class="days ${focusMode === "today" ? "single-focus" : ""}"></div>
         `;
 
         const daysEl = weekEl.querySelector(".days");
@@ -1590,7 +1667,7 @@
               if(!location) return;
               data[location.wi].days[location.di].tasks[location.ti].title = titleEl.textContent.trim();
               saveData();
-              renderAchievements();
+              renderAchievementSquares();
             });
 
             noteEl.addEventListener("input", () => {
@@ -1622,8 +1699,8 @@
       calculateStreak();
       renderTodayCard();
       renderFocusBanner();
-      renderSubjectsManager();
-      renderAchievements();
+      renderSettingsSquares();
+      renderAchievementSquares();
     }
 
     let timerInterval = null;
@@ -1696,11 +1773,6 @@
       document.getElementById("startTimer").textContent = "Start";
     });
 
-    document.getElementById("themeSwitch").addEventListener("change", (e) => {
-      applyTheme(e.target.value);
-      render();
-    });
-
     document.getElementById("showAll").addEventListener("click", () => {
       focusMode = "all";
       localStorage.setItem(FOCUS_KEY, focusMode);
@@ -1726,15 +1798,9 @@
         id: uid(),
         name: `Achievement ${achievements.length + 1}`,
         taskIds: [],
-        collapsed: false
       });
       saveAchievements();
-      renderAchievements();
-    });
-
-    document.getElementById("collapseAchievements").addEventListener("click", () => {
-      const panel = document.getElementById("achievementsGrid");
-      panel.style.display = panel.style.display === "none" ? "grid" : "none";
+      renderAchievementSquares();
     });
 
     updateCountdown();
@@ -1743,12 +1809,10 @@
     setRandomQuote();
 
     const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
-    document.getElementById("themeSwitch").value = savedTheme;
     applyTheme(savedTheme);
 
     loadTimerState();
     updateTimerDisplay();
-
     render();
   </script>
 </body>
