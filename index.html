@@ -16,7 +16,6 @@
       --accent2:#34d399;
       --accent3:#f59e0b;
       --danger:#ef4444;
-      --radius:22px;
       --shadow:0 20px 50px rgba(0,0,0,.28);
 
       --status-not-bg: rgba(239, 68, 68, 0.14);
@@ -97,7 +96,7 @@
 
     .stats{
       display:grid;
-      grid-template-columns:repeat(2,1fr);
+      grid-template-columns:1fr;
       gap:14px;
       align-content:start;
     }
@@ -123,7 +122,6 @@
     }
 
     .countdown{
-      grid-column:1/-1;
       background:linear-gradient(135deg, rgba(167,139,250,.18), rgba(52,211,153,.12));
     }
 
@@ -149,7 +147,6 @@
     }
 
     .progress-panel{
-      grid-column:1/-1;
       border-radius:20px;
       padding:18px;
       background:rgba(255,255,255,.07);
@@ -421,17 +418,10 @@
 
       <div class="stats">
         <div class="stat">
-          <span>Total tasks</span>
-          <strong id="totalTasks">0</strong>
-        </div>
-        <div class="stat">
-          <span>Completed</span>
-          <strong id="completedTasks">0</strong>
-        </div>
-        <div class="stat">
           <span>Progress</span>
           <strong id="progressText">0%</strong>
         </div>
+
         <div class="stat countdown">
           <span>Countdown to exams</span>
           <strong>April 27, 2026</strong>
@@ -758,8 +748,6 @@
       const completed = tasks.filter(t => t.status === "complete").length;
       const progress = total ? Math.round((completed / total) * 100) : 0;
 
-      document.getElementById("totalTasks").textContent = total;
-      document.getElementById("completedTasks").textContent = completed;
       document.getElementById("progressText").textContent = progress + "%";
       document.getElementById("progressCount").textContent = `${completed} / ${total} tasks complete`;
       document.getElementById("progressFill").style.width = `${progress}%`;
