@@ -13,7 +13,6 @@
       --text:#eef2ff;
       --muted:#b8c2e3;
       --shadow:0 20px 50px rgba(0,0,0,.28);
-
       --accent:#a78bfa;
       --accent-2:#34d399;
       --accent-3:#60a5fa;
@@ -112,7 +111,7 @@
     }
 
     .wrap{
-      max-width:1480px;
+      max-width:1500px;
       margin:0 auto;
       padding:28px;
     }
@@ -123,10 +122,7 @@
       box-shadow:var(--shadow);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
-      transition: background .3s ease, border-color .3s ease, transform .2s ease;
     }
-
-    .glass:hover{ transform: translateY(-1px); }
 
     .hero{
       border-radius:30px;
@@ -281,7 +277,41 @@
       border-radius:999px;
       background:linear-gradient(90deg, var(--accent-2), var(--accent));
       transition:width .35s ease;
-      box-shadow:0 0 20px color-mix(in srgb, var(--accent) 35%, transparent);
+    }
+
+    .subject-progress{
+      display:grid;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .subject-row{
+      padding:10px 12px;
+      border-radius:14px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .subject-row-top{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:8px;
+      font-size:.9rem;
+      font-weight:700;
+    }
+
+    .tiny-track{
+      height:10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      overflow:hidden;
+    }
+
+    .tiny-fill{
+      height:100%;
+      border-radius:999px;
+      transition:width .25s ease;
     }
 
     .top-grid{
@@ -340,7 +370,7 @@
 
     .toolbar{
       display:grid;
-      grid-template-columns:1fr 1fr 1fr 1fr auto;
+      grid-template-columns:1fr auto auto;
       gap:12px;
       padding:16px;
       border-radius:22px;
@@ -348,7 +378,7 @@
       align-items:center;
     }
 
-    select, button, input[type="number"]{
+    select, button, input[type="number"], input[type="text"], input[type="color"]{
       width:100%;
       border:none;
       outline:none;
@@ -366,7 +396,6 @@
       transition:.18s ease;
     }
 
-    button:hover{transform:translateY(-1px)}
     .btn-soft{background:rgba(255,255,255,.08)}
     .btn-accent{background:linear-gradient(135deg, var(--accent), var(--accent-2)); color:white}
     .btn-delete{
@@ -377,6 +406,79 @@
       width:auto;
     }
 
+    .subjects-panel, .achievements-panel{
+      border-radius:24px;
+      padding:18px;
+      margin-bottom:20px;
+    }
+
+    .subjects-grid, .achievements-grid{
+      display:grid;
+      gap:12px;
+    }
+
+    .subject-card, .achievement-card{
+      padding:14px;
+      border-radius:18px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.1);
+    }
+
+    .subject-card{
+      display:grid;
+      grid-template-columns:1.2fr 130px auto;
+      gap:10px;
+      align-items:center;
+    }
+
+    .achievement-top{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:10px;
+      align-items:center;
+      margin-bottom:12px;
+    }
+
+    .achievement-tasks{
+      max-height:220px;
+      overflow:auto;
+      display:grid;
+      gap:8px;
+      padding-right:6px;
+    }
+
+    .achievement-task{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding:8px 10px;
+      border-radius:12px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+      font-size:.9rem;
+    }
+
+    .achievement-status{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:.85rem;
+      font-weight:700;
+    }
+
+    .focus-banner{
+      margin-bottom:18px;
+      padding:14px 16px;
+      border-radius:18px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.1);
+      display:none;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+    }
+
+    .focus-banner.show{ display:flex; }
+
     .board{
       display:grid;
       gap:16px;
@@ -385,12 +487,6 @@
     .week{
       border-radius:26px;
       padding:18px;
-      animation: fadeInUp .35s ease both;
-    }
-
-    @keyframes fadeInUp{
-      from{opacity:0; transform:translateY(10px)}
-      to{opacity:1; transform:translateY(0)}
     }
 
     .week-head{
@@ -425,7 +521,6 @@
       background:rgba(255,255,255,.05);
       border:1px solid rgba(255,255,255,.1);
       min-height:170px;
-      transition:transform .18s ease, border-color .2s ease;
     }
 
     .day.highlight{
@@ -456,12 +551,6 @@
       background:rgba(255,255,255,.045);
       border:1px solid rgba(255,255,255,.09);
       transition:.2s ease;
-      animation: popIn .25s ease both;
-    }
-
-    @keyframes popIn{
-      from{opacity:0; transform:scale(.98)}
-      to{opacity:1; transform:scale(1)}
     }
 
     .task.dragging{
@@ -472,19 +561,16 @@
     .task.not-started{
       background:var(--status-not-bg);
       border-color:var(--status-not-border);
-      box-shadow: inset 0 0 0 1px rgba(239,68,68,.08);
     }
 
     .task.in-progress{
       background:var(--status-progress-bg);
       border-color:var(--status-progress-border);
-      box-shadow: inset 0 0 0 1px rgba(245,158,11,.08);
     }
 
     .task.complete{
       background:var(--status-complete-bg);
       border-color:var(--status-complete-border);
-      box-shadow: inset 0 0 0 1px rgba(52,211,153,.08);
       opacity:.92;
     }
 
@@ -547,11 +633,6 @@
       color:var(--status-complete-text);
     }
 
-    .bio{background:rgba(52,211,153,.16); color:#bbf7d0}
-    .bus{background:rgba(245,158,11,.16); color:#fde68a}
-    .geo{background:rgba(96,165,250,.16); color:#bfdbfe}
-    .math{background:rgba(167,139,250,.16); color:#ddd6fe}
-
     .task-title{
       font-weight:700;
       line-height:1.4;
@@ -559,7 +640,8 @@
       cursor:text;
     }
 
-    .task-title[contenteditable="true"]:focus{
+    .task-title[contenteditable="true"]:focus,
+    .note[contenteditable="true"]:focus{
       outline:2px solid color-mix(in srgb, var(--accent) 45%, transparent);
       border-radius:8px;
       padding:2px 4px;
@@ -571,12 +653,6 @@
       font-size:.82rem;
       min-height:18px;
       cursor:text;
-    }
-
-    .note[contenteditable="true"]:focus{
-      outline:2px solid color-mix(in srgb, var(--accent-2) 35%, transparent);
-      border-radius:8px;
-      padding:2px 4px;
     }
 
     .status, .subject-edit{
@@ -605,36 +681,6 @@
       background:rgba(52,211,153,.2);
       border-color:rgba(52,211,153,.45);
       color:var(--status-complete-text);
-    }
-
-    .badges-panel{
-      display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(180px,1fr));
-      gap:10px;
-      margin:20px 0;
-    }
-
-    .unit-badge{
-      padding:14px;
-      border-radius:18px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.1);
-    }
-
-    .unit-badge.done{
-      background:rgba(52,211,153,.12);
-      border-color:rgba(52,211,153,.32);
-      box-shadow:0 0 0 1px rgba(52,211,153,.18);
-    }
-
-    .unit-badge .name{
-      font-weight:800;
-      margin-bottom:4px;
-    }
-
-    .unit-badge .meta{
-      color:var(--muted);
-      font-size:.85rem;
     }
 
     .timer-grid{
@@ -669,65 +715,6 @@
       font-size:.88rem;
     }
 
-    .subject-progress{
-      display:grid;
-      gap:10px;
-      margin-top:14px;
-    }
-
-    .subject-row{
-      padding:10px 12px;
-      border-radius:14px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.08);
-    }
-
-    .subject-row-top{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:8px;
-      font-size:.9rem;
-      font-weight:700;
-    }
-
-    .tiny-track{
-      height:10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.08);
-      overflow:hidden;
-    }
-
-    .tiny-fill{
-      height:100%;
-      border-radius:999px;
-      background:linear-gradient(90deg, var(--accent-2), var(--accent));
-      transition:width .25s ease;
-    }
-
-    .focus-banner{
-      margin-bottom:18px;
-      padding:14px 16px;
-      border-radius:18px;
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.1);
-      display:none;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-    }
-
-    .focus-banner.show{ display:flex; }
-
-    .celebrate{
-      animation: pulseGlow .5s ease;
-    }
-
-    @keyframes pulseGlow{
-      0%{box-shadow:0 0 0 0 rgba(52,211,153,.35)}
-      100%{box-shadow:0 0 0 14px rgba(52,211,153,0)}
-    }
-
     .footer{
       margin:20px 0 8px;
       text-align:center;
@@ -737,7 +724,7 @@
 
     @media (max-width: 1100px){
       .hero,.top-grid{grid-template-columns:1fr}
-      .toolbar{grid-template-columns:1fr 1fr}
+      .toolbar,.subject-card{grid-template-columns:1fr}
     }
 
     @media (max-width: 640px){
@@ -758,7 +745,7 @@
         <div class="eyebrow">5-week exam study planner</div>
         <h1>Study Planner</h1>
         <p class="sub">
-          Track each day, edit tasks, drag tasks between days, stay motivated, and watch your unit badges unlock.
+          Track each day, edit tasks, drag tasks between days, customise achievements, and change subject names and colors.
         </p>
         <div class="hero-mini">
           <div class="mini">
@@ -813,7 +800,7 @@
         <h2 class="section-title">Focus & motivation</h2>
         <div class="motiv-box" style="margin-bottom:14px;">
           <div class="quote" id="quoteText">You are building certainty one task at a time.</div>
-          <div class="quote-sub" id="quoteSub">Refresh for a new line whenever you need it.</div>
+          <div class="quote-sub">Refresh for a new line whenever you need it.</div>
         </div>
 
         <div class="stat" style="padding:14px;">
@@ -833,61 +820,55 @@
       </div>
     </section>
 
-    <section class="glass" style="padding:18px; border-radius:24px; margin-bottom:20px;">
-      <h2 class="section-title">Unit completion badges</h2>
-      <p class="section-sub">These unlock automatically when every task in that unit group is complete.</p>
-      <div class="badges-panel" id="badgesPanel"></div>
+    <section class="subjects-panel glass">
+      <h2 class="section-title">Subjects</h2>
+      <p class="section-sub">Rename subjects and change their colors. Tasks update automatically.</p>
+      <div class="subjects-grid" id="subjectsGrid"></div>
+    </section>
+
+    <section class="achievements-panel glass">
+      <div style="display:flex; justify-content:space-between; gap:12px; align-items:center; flex-wrap:wrap;">
+        <div>
+          <h2 class="section-title" style="margin-bottom:4px;">Achievements</h2>
+          <p class="section-sub" style="margin:0;">Rename achievements and choose exactly which tasks belong to each one.</p>
+        </div>
+        <button class="btn-accent" id="addAchievement">+ Add achievement</button>
+      </div>
+      <div class="achievements-grid" id="achievementsGrid" style="margin-top:14px;"></div>
     </section>
 
     <div class="focus-banner" id="focusBanner">
       <div>
         <strong>Focus mode is on.</strong>
-        <span id="focusText" style="color:var(--muted); margin-left:6px;">Showing a smaller view.</span>
+        <span id="focusText" style="color:var(--muted); margin-left:6px;">Showing the current study day only.</span>
       </div>
       <button class="btn-soft" id="exitFocus">Exit focus</button>
     </div>
 
     <section class="toolbar glass">
-      <select id="weekFilter">
-        <option value="all">All weeks</option>
-      </select>
-
-      <select id="subjectFilter">
-        <option value="all">All subjects</option>
-        <option value="Biology">Biology</option>
-        <option value="Business">Business</option>
-        <option value="Geography">Geography</option>
-        <option value="Math">Math</option>
-      </select>
-
-      <select id="statusFilter">
-        <option value="all">All statuses</option>
-        <option value="not-started">Not started</option>
-        <option value="in-progress">In progress</option>
-        <option value="complete">Complete</option>
-      </select>
-
       <select id="themeSwitch">
         <option value="dark">Dark theme</option>
         <option value="pastel">Pastel theme</option>
         <option value="beige">Beige theme</option>
         <option value="neon">Neon theme</option>
       </select>
-
-      <button class="btn-soft" id="expandAll">Show all</button>
+      <button class="btn-soft" id="showAll">Show all</button>
+      <button class="btn-soft" id="collapseAchievements">Collapse achievements</button>
     </section>
 
     <section id="board" class="board"></section>
 
-    <p class="footer">Tasks, notes, and changes save automatically in your browser.</p>
+    <p class="footer">Tasks, achievements, colors, and edits save automatically in your browser.</p>
   </div>
 
   <script>
     const examDate = new Date("2026-04-27T09:00:00");
-    const STORAGE_KEY = "studyPlannerEditableV1";
-    const THEME_KEY = "studyPlannerThemeV1";
-    const FOCUS_KEY = "studyPlannerFocusV1";
-    const TIMER_KEY = "studyPlannerTimerV1";
+    const STORAGE_KEY = "studyPlannerEditableAchievementsV1";
+    const THEME_KEY = "studyPlannerThemeV2";
+    const FOCUS_KEY = "studyPlannerFocusV2";
+    const TIMER_KEY = "studyPlannerTimerV2";
+    const SUBJECTS_KEY = "studyPlannerSubjectsV1";
+    const ACHIEVEMENTS_KEY = "studyPlannerAchievementsV1";
 
     const quotes = [
       "You are building certainty one task at a time.",
@@ -903,6 +884,13 @@
     function uid() {
       return Math.random().toString(36).slice(2) + Date.now().toString(36);
     }
+
+    const defaultSubjects = [
+      { id: "bio", name: "Biology", color: "#34d399" },
+      { id: "bus", name: "Business", color: "#f59e0b" },
+      { id: "geo", name: "Geography", color: "#60a5fa" },
+      { id: "math", name: "Math", color: "#a78bfa" }
+    ];
 
     const plan = [
       { week: 1, days: [
@@ -1111,32 +1099,6 @@
       ]}
     ];
 
-    const badgeGroups = [
-      { name: "Biology Unit A", keys: ["A1.", "A2.", "A3.", "A4.", "Unit A"] },
-      { name: "Biology Unit B", keys: ["B1.", "B2.", "B3.", "B4."] },
-      { name: "Biology Unit C", keys: ["C1.", "C2.", "C3.", "C4."] },
-      { name: "Biology Unit D", keys: ["D1.", "D2.", "D3.", "D4."] },
-
-      { name: "Business Unit 1", keys: ["What is a business", "Types of business entities", "Business objectives", "Stakeholders", "Growth and evolution", "Multinational companies"] },
-      { name: "Business Unit 2", keys: ["human resource", "Organisational structure", "Leadership and management", "Motivation and demotivation", "Organisational (corporate) culture", "Communication", "Industrial relations"] },
-      { name: "Business Unit 3", keys: ["finance", "Sources of finance", "Costs and revenues", "Final accounts", "Profitability and liquidity", "Efficiency ratio", "Cash flow", "Investment appraisal", "Budgets"] },
-      { name: "Business Unit 4", keys: ["marketing", "Sales forecasting", "Market research", "7 Ps", "International marketing"] },
-      { name: "Business Unit 5/6", keys: ["operations", "Lean production", "Break-even", "Production planning", "Crisis management", "R&D", "Management information systems", "toolkit"] },
-
-      { name: "Geography: Changing Populations", keys: ["Changing populations"] },
-      { name: "Geography: Vulnerability & Resilience", keys: ["global climate change", "Responding to global climate change"] },
-      { name: "Geography: Global Resources", keys: ["resource consumption", "Resource stewardship"] },
-      { name: "Geography: Urban Environment", keys: ["Urban environment", "urban systems", "urban environments"] },
-      { name: "Geography: Geophysical Hazards", keys: ["Geophysical hazards", "hazard"] },
-      { name: "Geography: Food & Health", keys: ["Food and health", "food security", "spread of disease"] },
-
-      { name: "Math: Unit 1", keys: ["Number toolkit", "Sequences and series", "Financial applications"] },
-      { name: "Math: Unit 2", keys: ["Linear functions", "Further functions", "Modelling with functions"] },
-      { name: "Math: Unit 3", keys: ["Geometry toolkit", "Geometry of 3D shapes", "Trigonometry", "Voronoi diagrams"] },
-      { name: "Math: Unit 4", keys: ["Statistics toolkit", "Correlation and regression", "Probability", "Probability distributions", "Binomial distribution", "Normal distribution", "Hypothesis testing"] },
-      { name: "Math: Unit 5", keys: ["Differentiation", "Integration"] }
-    ];
-
     function clonePlan() {
       return JSON.parse(JSON.stringify(plan));
     }
@@ -1149,21 +1111,71 @@
       return clonePlan();
     }
 
+    function loadSubjects(){
+      const saved = localStorage.getItem(SUBJECTS_KEY);
+      if(saved){
+        try { return JSON.parse(saved); } catch(e){}
+      }
+      return JSON.parse(JSON.stringify(defaultSubjects));
+    }
+
+    function defaultAchievementsFromTasks(tasks){
+      const groups = [
+        { name: "Biology Unit A", match: t => t.title.includes("A1.") || t.title.includes("A2.") || t.title.includes("A3.") || t.title.includes("A4.") || t.title.includes("Unit A") },
+        { name: "Biology Unit B", match: t => t.title.includes("B1.") || t.title.includes("B2.") || t.title.includes("B3.") || t.title.includes("B4.") },
+        { name: "Biology Unit C", match: t => t.title.includes("C1.") || t.title.includes("C2.") || t.title.includes("C3.") || t.title.includes("C4.") },
+        { name: "Biology Unit D", match: t => t.title.includes("D1.") || t.title.includes("D2.") || t.title.includes("D3.") || t.title.includes("D4.") },
+      ];
+      return groups.map(g => ({
+        id: uid(),
+        name: g.name,
+        taskIds: tasks.filter(g.match).map(t => t.id),
+        collapsed: false
+      }));
+    }
+
+    function loadAchievements(allTasks){
+      const saved = localStorage.getItem(ACHIEVEMENTS_KEY);
+      if(saved){
+        try { return JSON.parse(saved); } catch(e){}
+      }
+      return defaultAchievementsFromTasks(allTasks);
+    }
+
     let data = loadData();
+    let subjects = loadSubjects();
     let draggedTask = null;
     let focusMode = localStorage.getItem(FOCUS_KEY) || "all";
+    let achievements = loadAchievements(data.flatMap(w => w.days.flatMap(d => d.tasks)));
 
     function saveData(){
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     }
 
-    function subjectClass(subject){
-      return {
-        Biology: "bio",
-        Business: "bus",
-        Geography: "geo",
-        Math: "math"
-      }[subject] || "";
+    function saveSubjects(){
+      localStorage.setItem(SUBJECTS_KEY, JSON.stringify(subjects));
+    }
+
+    function saveAchievements(){
+      localStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(achievements));
+    }
+
+    function getSubjectMeta(name){
+      return subjects.find(s => s.name === name) || { name, color: "#94a3b8", id: uid() };
+    }
+
+    function subjectStyle(name){
+      const meta = getSubjectMeta(name);
+      return `background:${hexToRgba(meta.color, .18)}; color:${meta.color};`;
+    }
+
+    function hexToRgba(hex, alpha){
+      const clean = hex.replace("#","");
+      const bigint = parseInt(clean.length === 3 ? clean.split("").map(c=>c+c).join("") : clean, 16);
+      const r = (bigint >> 16) & 255;
+      const g = (bigint >> 8) & 255;
+      const b = bigint & 255;
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
     }
 
     function getAllTasks(){
@@ -1183,7 +1195,6 @@
       const now = new Date();
       let diff = examDate - now;
       if(diff < 0) diff = 0;
-
       document.getElementById("days").textContent = Math.floor(diff / (1000*60*60*24));
       document.getElementById("hours").textContent = Math.floor((diff / (1000*60*60)) % 24);
       document.getElementById("minutes").textContent = Math.floor((diff / (1000*60)) % 60);
@@ -1200,11 +1211,11 @@
       document.getElementById("progressCount").textContent = `${completed} / ${total} tasks complete`;
       document.getElementById("progressFill").style.width = `${progress}%`;
 
-      const subjects = ["Biology","Business","Geography","Math"];
       const subjectProgress = document.getElementById("subjectProgress");
       subjectProgress.innerHTML = "";
+
       subjects.forEach(subject => {
-        const subjectTasks = tasks.filter(t => t.subject === subject);
+        const subjectTasks = tasks.filter(t => t.subject === subject.name);
         const done = subjectTasks.filter(t => t.status === "complete").length;
         const pct = subjectTasks.length ? Math.round((done / subjectTasks.length) * 100) : 0;
 
@@ -1212,10 +1223,10 @@
         row.className = "subject-row";
         row.innerHTML = `
           <div class="subject-row-top">
-            <span>${subject}</span>
+            <span>${subject.name}</span>
             <span>${done}/${subjectTasks.length}</span>
           </div>
-          <div class="tiny-track"><div class="tiny-fill" style="width:${pct}%"></div></div>
+          <div class="tiny-track"><div class="tiny-fill" style="width:${pct}%; background:linear-gradient(90deg, ${subject.color}, ${subject.color});"></div></div>
         `;
         subjectProgress.appendChild(row);
       });
@@ -1225,11 +1236,8 @@
       const days = data.flatMap(w => w.days).sort((a,b) => a.day - b.day);
       let streak = 0;
       for(const day of days){
-        if(day.tasks.length && day.tasks.every(t => t.status === "complete")){
-          streak++;
-        } else {
-          break;
-        }
+        if(day.tasks.length && day.tasks.every(t => t.status === "complete")) streak++;
+        else break;
       }
       document.getElementById("streakCount").textContent = `${streak} day${streak === 1 ? "" : "s"}`;
     }
@@ -1239,8 +1247,8 @@
       const todayList = document.getElementById("todayList");
       const allDays = data.flatMap(w => w.days);
       const current = allDays.find(d => d.day === dayNumber) || allDays[0];
-
       todayList.innerHTML = "";
+
       current.tasks.forEach(task => {
         const item = document.createElement("div");
         item.className = "today-item";
@@ -1249,64 +1257,10 @@
             <div class="today-day">Day ${current.day}</div>
             <div class="today-title">${task.title}</div>
           </div>
-          <span class="subject ${subjectClass(task.subject)}">${task.subject}</span>
+          <span class="subject" style="${subjectStyle(task.subject)}">${task.subject}</span>
         `;
         todayList.appendChild(item);
       });
-    }
-
-    function renderBadges(){
-      const panel = document.getElementById("badgesPanel");
-      panel.innerHTML = "";
-
-      const tasks = getAllTasks();
-
-      badgeGroups.forEach(group => {
-        const matching = tasks.filter(t => group.keys.some(k => t.title.toLowerCase().includes(k.toLowerCase())));
-        const done = matching.length > 0 && matching.every(t => t.status === "complete");
-
-        const el = document.createElement("div");
-        el.className = `unit-badge ${done ? "done celebrate" : ""}`;
-        el.innerHTML = `
-          <div class="name">${done ? "🏆" : "⬡"} ${group.name}</div>
-          <div class="meta">${matching.filter(t => t.status === "complete").length}/${matching.length} tasks complete</div>
-        `;
-        panel.appendChild(el);
-      });
-    }
-
-    function taskVisible(task){
-      const subjectFilter = document.getElementById("subjectFilter").value;
-      const statusFilter = document.getElementById("statusFilter").value;
-
-      const subjectOk = subjectFilter === "all" || task.subject === subjectFilter;
-      const statusOk = statusFilter === "all" || task.status === statusFilter;
-      return subjectOk && statusOk;
-    }
-
-    function populateWeekFilter(){
-      const weekFilter = document.getElementById("weekFilter");
-      weekFilter.innerHTML = `<option value="all">All weeks</option>`;
-      data.forEach(w => {
-        const option = document.createElement("option");
-        option.value = String(w.week);
-        option.textContent = `Week ${w.week}`;
-        weekFilter.appendChild(option);
-      });
-    }
-
-    function renderFocusBanner(){
-      const banner = document.getElementById("focusBanner");
-      const text = document.getElementById("focusText");
-      if(focusMode === "today"){
-        banner.classList.add("show");
-        text.textContent = "Showing the current study day only.";
-      } else if(["Biology","Business","Geography","Math"].includes(focusMode)){
-        banner.classList.add("show");
-        text.textContent = `Showing ${focusMode} only.`;
-      } else {
-        banner.classList.remove("show");
-      }
     }
 
     function findTaskLocation(taskId){
@@ -1327,7 +1281,7 @@
       const day = week.days.find(d => d.day === dayNumber);
       day.tasks.push({
         id: uid(),
-        subject: "Biology",
+        subject: subjects[0]?.name || "Biology",
         title: "New task",
         status: "not-started",
         note: ""
@@ -1340,26 +1294,186 @@
       const loc = findTaskLocation(taskId);
       if(!loc) return;
       data[loc.wi].days[loc.di].tasks.splice(loc.ti, 1);
+      achievements.forEach(a => a.taskIds = a.taskIds.filter(id => id !== taskId));
       saveData();
+      saveAchievements();
       render();
+    }
+
+    function setRandomQuote(){
+      const quote = quotes[Math.floor(Math.random() * quotes.length)];
+      document.getElementById("quoteText").textContent = quote;
+    }
+
+    function applyTheme(theme){
+      document.body.classList.remove("theme-pastel","theme-beige","theme-neon");
+      const label = document.getElementById("themeLabel");
+
+      if(theme === "pastel"){
+        document.body.classList.add("theme-pastel");
+        label.textContent = "Pastel";
+      } else if(theme === "beige"){
+        document.body.classList.add("theme-beige");
+        label.textContent = "Beige";
+      } else if(theme === "neon"){
+        document.body.classList.add("theme-neon");
+        label.textContent = "Neon";
+      } else {
+        label.textContent = "Dark";
+      }
+      localStorage.setItem(THEME_KEY, theme);
+    }
+
+    function renderSubjectsManager(){
+      const grid = document.getElementById("subjectsGrid");
+      grid.innerHTML = "";
+
+      subjects.forEach(subject => {
+        const card = document.createElement("div");
+        card.className = "subject-card";
+        card.innerHTML = `
+          <input type="text" value="${subject.name}" />
+          <input type="color" value="${subject.color}" />
+          <button class="btn-delete">Delete</button>
+        `;
+
+        const nameInput = card.querySelector('input[type="text"]');
+        const colorInput = card.querySelector('input[type="color"]');
+        const deleteBtn = card.querySelector('button');
+
+        nameInput.addEventListener("input", () => {
+          const oldName = subject.name;
+          subject.name = nameInput.value.trim() || oldName;
+
+          getAllTasks().forEach(task => {
+            if(task.subject === oldName) task.subject = subject.name;
+          });
+
+          saveSubjects();
+          saveData();
+          render();
+        });
+
+        colorInput.addEventListener("input", () => {
+          subject.color = colorInput.value;
+          saveSubjects();
+          render();
+        });
+
+        deleteBtn.addEventListener("click", () => {
+          if(subjects.length <= 1) return;
+          const fallback = subjects.find(s => s.id !== subject.id);
+          getAllTasks().forEach(task => {
+            if(task.subject === subject.name) task.subject = fallback.name;
+          });
+          subjects = subjects.filter(s => s.id !== subject.id);
+          saveSubjects();
+          saveData();
+          render();
+        });
+
+        grid.appendChild(card);
+      });
+
+      const addBtn = document.createElement("button");
+      addBtn.className = "btn-accent";
+      addBtn.textContent = "+ Add subject";
+      addBtn.addEventListener("click", () => {
+        subjects.push({
+          id: uid(),
+          name: `Subject ${subjects.length + 1}`,
+          color: "#94a3b8"
+        });
+        saveSubjects();
+        render();
+      });
+      grid.appendChild(addBtn);
+    }
+
+    function achievementProgress(achievement){
+      const tasks = getAllTasks().filter(t => achievement.taskIds.includes(t.id));
+      const done = tasks.filter(t => t.status === "complete").length;
+      return { total: tasks.length, done };
+    }
+
+    function renderAchievements(){
+      const grid = document.getElementById("achievementsGrid");
+      grid.innerHTML = "";
+      const allTasks = getAllTasks();
+
+      achievements.forEach(achievement => {
+        const { total, done } = achievementProgress(achievement);
+        const complete = total > 0 && total === done;
+
+        const card = document.createElement("div");
+        card.className = "achievement-card";
+        card.innerHTML = `
+          <div class="achievement-top">
+            <input type="text" value="${achievement.name}" />
+            <button class="btn-delete">Delete</button>
+          </div>
+          <div class="achievement-tasks"></div>
+          <div class="achievement-status">${done}/${total} tasks complete ${complete ? "🏆" : ""}</div>
+        `;
+
+        const nameInput = card.querySelector('input[type="text"]');
+        const deleteBtn = card.querySelector('button');
+        const tasksWrap = card.querySelector('.achievement-tasks');
+
+        nameInput.addEventListener("input", () => {
+          achievement.name = nameInput.value.trim() || "Untitled achievement";
+          saveAchievements();
+        });
+
+        deleteBtn.addEventListener("click", () => {
+          achievements = achievements.filter(a => a.id !== achievement.id);
+          saveAchievements();
+          render();
+        });
+
+        allTasks.forEach(task => {
+          const row = document.createElement("label");
+          row.className = "achievement-task";
+          row.innerHTML = `
+            <input type="checkbox" ${achievement.taskIds.includes(task.id) ? "checked" : ""} />
+            <div>
+              <div style="font-weight:700;">${task.title}</div>
+              <div style="color:var(--muted); font-size:.82rem;">${task.subject}</div>
+            </div>
+          `;
+
+          const checkbox = row.querySelector('input');
+          checkbox.addEventListener("change", () => {
+            if(checkbox.checked){
+              if(!achievement.taskIds.includes(task.id)) achievement.taskIds.push(task.id);
+            } else {
+              achievement.taskIds = achievement.taskIds.filter(id => id !== task.id);
+            }
+            saveAchievements();
+            renderAchievements();
+          });
+
+          tasksWrap.appendChild(row);
+        });
+
+        grid.appendChild(card);
+      });
+    }
+
+    function renderFocusBanner(){
+      const banner = document.getElementById("focusBanner");
+      if(focusMode === "today") banner.classList.add("show");
+      else banner.classList.remove("show");
     }
 
     function render(){
       const board = document.getElementById("board");
-      const weekFilter = document.getElementById("weekFilter").value;
       board.innerHTML = "";
-
       const currentStudyDay = getCurrentStudyDay();
 
       data.forEach((weekObj) => {
-        if(weekFilter !== "all" && String(weekObj.week) !== weekFilter) return;
-
-        let visibleDays = weekObj.days.filter(dayObj => dayObj.tasks.some(taskVisible) || dayObj.tasks.length === 0);
-
-        if(focusMode === "today"){
-          visibleDays = visibleDays.filter(d => d.day === currentStudyDay);
-        }
-
+        let visibleDays = weekObj.days;
+        if(focusMode === "today") visibleDays = visibleDays.filter(d => d.day === currentStudyDay);
         if(!visibleDays.length) return;
 
         const weekEl = document.createElement("section");
@@ -1390,9 +1504,7 @@
             dayEl.classList.add("drag-target");
           });
 
-          dayEl.addEventListener("dragleave", () => {
-            dayEl.classList.remove("drag-target");
-          });
+          dayEl.addEventListener("dragleave", () => dayEl.classList.remove("drag-target"));
 
           dayEl.addEventListener("drop", () => {
             dayEl.classList.remove("drag-target");
@@ -1409,27 +1521,23 @@
           });
 
           dayObj.tasks.forEach((task) => {
-            if(!taskVisible(task)) return;
-            if(["Biology","Business","Geography","Math"].includes(focusMode) && task.subject !== focusMode) return;
-
             const taskEl = document.createElement("div");
             taskEl.className = `task ${task.status}`;
             taskEl.draggable = true;
+
+            const subjectOptions = subjects.map(s =>
+              `<option value="${s.name}" ${s.name === task.subject ? "selected" : ""}>${s.name}</option>`
+            ).join("");
 
             taskEl.innerHTML = `
               <div class="task-top">
                 <div class="task-top-left">
                   <span class="drag-handle">⋮⋮</span>
-                  <span class="subject ${subjectClass(task.subject)}">${task.subject}</span>
+                  <span class="subject" style="${subjectStyle(task.subject)}">${task.subject}</span>
                   ${task.status === "complete" ? `<span class="badge done">Done</span>` : task.status === "in-progress" ? `<span class="badge">Working on it</span>` : ""}
                 </div>
                 <div class="task-actions">
-                  <select class="subject-edit">
-                    <option value="Biology">Biology</option>
-                    <option value="Business">Business</option>
-                    <option value="Geography">Geography</option>
-                    <option value="Math">Math</option>
-                  </select>
+                  <select class="subject-edit">${subjectOptions}</select>
                   <select class="status ${task.status}">
                     <option value="not-started">Not started</option>
                     <option value="in-progress">In progress</option>
@@ -1449,7 +1557,6 @@
             const noteEl = taskEl.querySelector(".note");
 
             statusSelect.value = task.status;
-            subjectSelect.value = task.subject;
             titleEl.textContent = task.title;
             noteEl.textContent = task.note || "";
 
@@ -1458,9 +1565,7 @@
               taskEl.classList.add("dragging");
             });
 
-            taskEl.addEventListener("dragend", () => {
-              taskEl.classList.remove("dragging");
-            });
+            taskEl.addEventListener("dragend", () => taskEl.classList.remove("dragging"));
 
             statusSelect.addEventListener("change", () => {
               const location = findTaskLocation(task.id);
@@ -1478,15 +1583,14 @@
               render();
             });
 
-            deleteBtn.addEventListener("click", () => {
-              deleteTask(task.id);
-            });
+            deleteBtn.addEventListener("click", () => deleteTask(task.id));
 
             titleEl.addEventListener("input", () => {
               const location = findTaskLocation(task.id);
               if(!location) return;
               data[location.wi].days[location.di].tasks[location.ti].title = titleEl.textContent.trim();
               saveData();
+              renderAchievements();
             });
 
             noteEl.addEventListener("input", () => {
@@ -1517,33 +1621,9 @@
       updateStats();
       calculateStreak();
       renderTodayCard();
-      renderBadges();
       renderFocusBanner();
-    }
-
-    function applyTheme(theme){
-      document.body.classList.remove("theme-pastel","theme-beige","theme-neon");
-      const label = document.getElementById("themeLabel");
-
-      if(theme === "pastel"){
-        document.body.classList.add("theme-pastel");
-        label.textContent = "Pastel";
-      } else if(theme === "beige"){
-        document.body.classList.add("theme-beige");
-        label.textContent = "Beige";
-      } else if(theme === "neon"){
-        document.body.classList.add("theme-neon");
-        label.textContent = "Neon";
-      } else {
-        label.textContent = "Dark";
-      }
-
-      localStorage.setItem(THEME_KEY, theme);
-    }
-
-    function setRandomQuote(){
-      const quote = quotes[Math.floor(Math.random() * quotes.length)];
-      document.getElementById("quoteText").textContent = quote;
+      renderSubjectsManager();
+      renderAchievements();
     }
 
     let timerInterval = null;
@@ -1616,19 +1696,12 @@
       document.getElementById("startTimer").textContent = "Start";
     });
 
-    document.getElementById("weekFilter").addEventListener("change", render);
-    document.getElementById("subjectFilter").addEventListener("change", render);
-    document.getElementById("statusFilter").addEventListener("change", render);
-
     document.getElementById("themeSwitch").addEventListener("change", (e) => {
       applyTheme(e.target.value);
       render();
     });
 
-    document.getElementById("expandAll").addEventListener("click", () => {
-      document.getElementById("weekFilter").value = "all";
-      document.getElementById("subjectFilter").value = "all";
-      document.getElementById("statusFilter").value = "all";
+    document.getElementById("showAll").addEventListener("click", () => {
       focusMode = "all";
       localStorage.setItem(FOCUS_KEY, focusMode);
       render();
@@ -1648,18 +1721,34 @@
 
     document.getElementById("refreshQuote").addEventListener("click", setRandomQuote);
 
-    populateWeekFilter();
+    document.getElementById("addAchievement").addEventListener("click", () => {
+      achievements.push({
+        id: uid(),
+        name: `Achievement ${achievements.length + 1}`,
+        taskIds: [],
+        collapsed: false
+      });
+      saveAchievements();
+      renderAchievements();
+    });
+
+    document.getElementById("collapseAchievements").addEventListener("click", () => {
+      const panel = document.getElementById("achievementsGrid");
+      panel.style.display = panel.style.display === "none" ? "grid" : "none";
+    });
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
     setRandomQuote();
 
     const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
     document.getElementById("themeSwitch").value = savedTheme;
     applyTheme(savedTheme);
 
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-
     loadTimerState();
     updateTimerDisplay();
+
     render();
   </script>
 </body>
