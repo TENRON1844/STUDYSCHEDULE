@@ -12,10 +12,6 @@
       --card-border:rgba(255,255,255,0.14);
       --text:#eef2ff;
       --muted:#b8c2e3;
-      --accent:#a78bfa;
-      --accent2:#34d399;
-      --accent3:#f59e0b;
-      --danger:#ef4444;
       --shadow:0 20px 50px rgba(0,0,0,.28);
 
       --status-not-bg: rgba(239, 68, 68, 0.14);
@@ -330,7 +326,6 @@
     .bus{background:rgba(245,158,11,.16); color:#fde68a}
     .geo{background:rgba(96,165,250,.16); color:#bfdbfe}
     .math{background:rgba(167,139,250,.16); color:#ddd6fe}
-    .free{background:rgba(148,163,184,.16); color:#e2e8f0}
 
     .task-title{
       font-weight:700;
@@ -456,7 +451,6 @@
         <option value="Business">Business</option>
         <option value="Geography">Geography</option>
         <option value="Math">Math</option>
-        <option value="Free">Free / No Math</option>
       </select>
 
       <select id="statusFilter">
@@ -478,7 +472,7 @@
 
   <script>
     const examDate = new Date("2026-04-27T09:00:00");
-    const STORAGE_KEY = "studyPlannerAestheticV2";
+    const STORAGE_KEY = "studyPlannerAestheticV3";
 
     const plan = [
       { week: 1, days: [
@@ -504,7 +498,6 @@
           { subject: "Biology", title: "A3.1 Diversity of organisms", status: "not-started", note: "" },
           { subject: "Business", title: "Stakeholders", status: "not-started", note: "" },
           { subject: "Geography", title: "Geography practice: Changing populations", status: "not-started", note: "" },
-          { subject: "Free", title: "No math today", status: "not-started", note: "" },
         ]},
         { day: 5, tasks: [
           { subject: "Biology", title: "A4.1 Evolution and speciation", status: "not-started", note: "" },
@@ -530,7 +523,6 @@
           { subject: "Biology", title: "B1.1 Carbohydrates and lipids", status: "not-started", note: "" },
           { subject: "Business", title: "Organisational structure", status: "not-started", note: "" },
           { subject: "Geography", title: "Geography practice: Vulnerability and resilience", status: "not-started", note: "" },
-          { subject: "Free", title: "No math today", status: "not-started", note: "" },
         ]},
         { day: 9, tasks: [
           { subject: "Biology", title: "B1.2 Proteins", status: "not-started", note: "" },
@@ -554,7 +546,6 @@
           { subject: "Biology", title: "B2.3 Cell specialisation", status: "not-started", note: "" },
           { subject: "Business", title: "Communication", status: "not-started", note: "" },
           { subject: "Geography", title: "Geography practice: Global resource consumption and security", status: "not-started", note: "" },
-          { subject: "Free", title: "No math today", status: "not-started", note: "" },
         ]},
         { day: 13, tasks: [
           { subject: "Biology", title: "B3.1 Gas exchange", status: "not-started", note: "" },
@@ -586,7 +577,6 @@
           { subject: "Biology", title: "C1.1 Enzymes and metabolism", status: "not-started", note: "" },
           { subject: "Business", title: "Final accounts", status: "not-started", note: "" },
           { subject: "Geography", title: "Geography practice: Urban environment", status: "not-started", note: "" },
-          { subject: "Free", title: "No math today", status: "not-started", note: "" },
         ]},
         { day: 18, tasks: [
           { subject: "Biology", title: "C1.2 Cell respiration", status: "not-started", note: "" },
@@ -618,7 +608,6 @@
           { subject: "Biology", title: "C3.2 Defence against disease", status: "not-started", note: "" },
           { subject: "Business", title: "Budgets", status: "not-started", note: "" },
           { subject: "Geography", title: "Geography practice: Geophysical hazards", status: "not-started", note: "" },
-          { subject: "Free", title: "No math today", status: "not-started", note: "" },
         ]},
         { day: 23, tasks: [
           { subject: "Biology", title: "C4.1 Populations and communities", status: "not-started", note: "" },
@@ -636,25 +625,21 @@
           { subject: "Biology", title: "D1.1 DNA replication", status: "not-started", note: "" },
           { subject: "Business", title: "Sales forecasting", status: "not-started", note: "" },
           { subject: "Geography", title: "Stakeholders in food and health", status: "not-started", note: "" },
-          { subject: "Free", title: "No math today", status: "not-started", note: "" },
         ]},
         { day: 26, tasks: [
           { subject: "Biology", title: "D1.2 Protein synthesis", status: "not-started", note: "" },
           { subject: "Business", title: "Market research", status: "not-started", note: "" },
           { subject: "Geography", title: "Future health and food security and sustainability", status: "not-started", note: "" },
-          { subject: "Free", title: "No math today", status: "not-started", note: "" },
         ]},
         { day: 27, tasks: [
           { subject: "Biology", title: "D1.3 Mutations and gene editing", status: "not-started", note: "" },
           { subject: "Business", title: "The marketing mix (7 Ps)", status: "not-started", note: "" },
           { subject: "Geography", title: "Geography practice: Food and health", status: "not-started", note: "" },
-          { subject: "Free", title: "No math today", status: "not-started", note: "" },
         ]},
         { day: 28, tasks: [
           { subject: "Biology", title: "D2.1 Cell and nuclear division", status: "not-started", note: "" },
           { subject: "Business", title: "International marketing", status: "not-started", note: "" },
           { subject: "Geography", title: "Geography mixed review: weakest unit", status: "not-started", note: "" },
-          { subject: "Free", title: "No math today", status: "not-started", note: "" },
         ]},
       ]},
       { week: 5, days: [
@@ -662,43 +647,36 @@
           { subject: "Biology", title: "D2.3 Water potential", status: "not-started", note: "" },
           { subject: "Business", title: "Introduction to operations management + operations methods", status: "not-started", note: "" },
           { subject: "Geography", title: "Geography mixed review: second weakest unit", status: "not-started", note: "" },
-          { subject: "Free", title: "No math today", status: "not-started", note: "" },
         ]},
         { day: 30, tasks: [
           { subject: "Biology", title: "D3.1 Reproduction", status: "not-started", note: "" },
           { subject: "Business", title: "Lean production and quality management + location", status: "not-started", note: "" },
           { subject: "Geography", title: "Geography mixed review: strongest unit", status: "not-started", note: "" },
-          { subject: "Free", title: "No math today", status: "not-started", note: "" },
         ]},
         { day: 31, tasks: [
           { subject: "Biology", title: "D3.2 Inheritance", status: "not-started", note: "" },
           { subject: "Business", title: "Break-even analysis + production planning", status: "not-started", note: "" },
           { subject: "Geography", title: "Geography mixed review: second strongest unit", status: "not-started", note: "" },
-          { subject: "Free", title: "No math today", status: "not-started", note: "" },
         ]},
         { day: 32, tasks: [
           { subject: "Biology", title: "D3.3 Homeostasis", status: "not-started", note: "" },
           { subject: "Business", title: "Crisis management and contingency planning + R&D", status: "not-started", note: "" },
           { subject: "Geography", title: "Geography mixed review: human geography focus", status: "not-started", note: "" },
-          { subject: "Free", title: "No math today", status: "not-started", note: "" },
         ]},
         { day: 33, tasks: [
           { subject: "Biology", title: "D4.1 Natural selection", status: "not-started", note: "" },
           { subject: "Business", title: "Management information systems", status: "not-started", note: "" },
           { subject: "Geography", title: "Geography mixed review: physical geography focus", status: "not-started", note: "" },
-          { subject: "Free", title: "No math today", status: "not-started", note: "" },
         ]},
         { day: 34, tasks: [
           { subject: "Biology", title: "D4.2 Stability and change", status: "not-started", note: "" },
           { subject: "Business", title: "Business management toolkit", status: "not-started", note: "" },
           { subject: "Geography", title: "Geography full mixed review", status: "not-started", note: "" },
-          { subject: "Free", title: "No math today", status: "not-started", note: "" },
         ]},
         { day: 35, tasks: [
           { subject: "Biology", title: "D4.3 Climate change", status: "not-started", note: "" },
           { subject: "Business", title: "Business management toolkit case studies", status: "not-started", note: "" },
           { subject: "Geography", title: "Geography final consolidation", status: "not-started", note: "" },
-          { subject: "Free", title: "No math today", status: "not-started", note: "" },
         ]},
       ]}
     ];
@@ -708,9 +686,8 @@
         Biology: "bio",
         Business: "bus",
         Geography: "geo",
-        Math: "math",
-        Free: "free"
-      }[subject] || "free";
+        Math: "math"
+      }[subject] || "";
     }
 
     function clonePlan() {
@@ -743,7 +720,7 @@
     }
 
     function updateStats(){
-      const tasks = data.flatMap(w => w.days.flatMap(d => d.tasks)).filter(t => t.subject !== "Free");
+      const tasks = data.flatMap(w => w.days.flatMap(d => d.tasks));
       const total = tasks.length;
       const completed = tasks.filter(t => t.status === "complete").length;
       const progress = total ? Math.round((completed / total) * 100) : 0;
