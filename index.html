@@ -384,14 +384,6 @@
       width:auto;
     }
 
-    .btn-move{
-      background:rgba(255,255,255,.08);
-      color:var(--text);
-      border:1px solid rgba(255,255,255,.12);
-      padding:8px 10px;
-      width:auto;
-    }
-
     .board{
       display:grid;
       gap:16px;
@@ -451,12 +443,6 @@
     .day.drag-target{
       outline:2px dashed var(--accent);
       outline-offset:4px;
-    }
-
-    .day.mobile-target{
-      outline:2px solid var(--accent);
-      outline-offset:4px;
-      box-shadow:0 0 0 1px color-mix(in srgb, var(--accent) 30%, transparent);
     }
 
     .day h3{
@@ -740,28 +726,6 @@
 
     .focus-banner.show{ display:flex; }
 
-    .mobile-move-banner{
-      display:none;
-      margin-bottom:18px;
-      padding:14px 16px;
-      border-radius:18px;
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.1);
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-
-    .mobile-move-banner.show{
-      display:flex;
-    }
-
-    .mobile-move-text{
-      color:var(--muted);
-      font-size:.92rem;
-    }
-
     .celebrate{
       animation: pulseGlow .5s ease;
     }
@@ -780,11 +744,6 @@
 
     .save-status strong{
       color:var(--text);
-    }
-
-    body.focus-clean #dashboardSection,
-    body.focus-clean #badgesSection{
-      display:none;
     }
 
     .footer{
@@ -867,12 +826,7 @@
 
     <div class="save-status" id="saveStatus">Loading planner…</div>
 
-    <div class="mobile-move-banner" id="mobileMoveBanner">
-      <div class="mobile-move-text" id="mobileMoveText">Choose a day to move this task.</div>
-      <button class="btn-soft" id="cancelMobileMove">Cancel move</button>
-    </div>
-
-    <section class="top-grid" id="dashboardSection">
+    <section class="top-grid">
       <div class="today-card glass">
         <h2 class="section-title">Today</h2>
         <p class="section-sub">A quick focus view for the current study day.</p>
@@ -903,7 +857,7 @@
       </div>
     </section>
 
-    <section class="glass" id="badgesSection" style="padding:18px; border-radius:24px; margin-bottom:20px;">
+    <section class="glass" style="padding:18px; border-radius:24px; margin-bottom:20px;">
       <h2 class="section-title">Unit completion badges</h2>
       <p class="section-sub">These unlock automatically when every task in that unit group is complete.</p>
       <div class="badges-panel" id="badgesPanel"></div>
@@ -1232,7 +1186,6 @@
 
     let data = loadLocalData();
     let draggedTask = null;
-    let mobileMoveTaskId = null;
     let focusMode = localStorage.getItem(FOCUS_KEY) || "all";
     let saveTimeout = null;
     let isSaving = false;
@@ -1374,48 +1327,6 @@
       }, 500);
     }
 
-    function isTouchDevice(){
-      return window.matchMedia("(pointer: coarse)").matches || "ontouchstart" in window;
-    }
-
-    function startMobileMove(taskId, taskTitle){
-      mobileMoveTaskId = taskId;
-      const banner = document.getElementById("mobileMoveBanner");
-      const text = document.getElementById("mobileMoveText");
-      text.textContent = `Tap a day card to move "${taskTitle}".`;
-      banner.classList.add("show");
-      render();
-    }
-
-    function cancelMobileMove(){
-      mobileMoveTaskId = null;
-      document.getElementById("mobileMoveBanner").classList.remove("show");
-      render();
-    }
-
-    function moveTaskToDay(taskId, targetDayNumber){
-      const source = findTaskLocation(taskId);
-      if(!source) return;
-
-      const task = data[source.wi].days[source.di].tasks.splice(source.ti, 1)[0];
-      const targetWeek = data.find(w => w.days.some(d => d.day === Number(targetDayNumber)));
-      const targetDay = targetWeek.days.find(d => d.day === Number(targetDayNumber));
-      targetDay.tasks.push(task);
-
-      mobileMoveTaskId = null;
-      document.getElementById("mobileMoveBanner").classList.remove("show");
-      queueSave();
-      render();
-    }
-
-    function updateFocusLayout(){
-      if(focusMode === "today" || ["Biology","Business","Geography","Math"].includes(focusMode)){
-        document.body.classList.add("focus-clean");
-      } else {
-        document.body.classList.remove("focus-clean");
-      }
-    }
-
     function updateCountdown(){
       const now = new Date();
       let diff = examDate - now;
@@ -1544,8 +1455,6 @@
       } else {
         banner.classList.remove("show");
       }
-
-      updateFocusLayout();
     }
 
     function findTaskLocation(taskId){
@@ -1618,7 +1527,7 @@
 
         visibleDays.forEach((dayObj) => {
           const dayEl = document.createElement("article");
-          dayEl.className = `day ${dayObj.day === currentStudyDay ? "highlight" : ""} ${mobileMoveTaskId ? "mobile-target" : ""}`;
+          dayEl.className = `day ${dayObj.day === currentStudyDay ? "highlight" : ""}`;
           dayEl.dataset.day = dayObj.day;
           dayEl.innerHTML = `
             <h3>Day ${dayObj.day}</h3>
@@ -1644,19 +1553,8 @@
             const targetWeek = data.find(w => w.days.some(d => d.day === Number(dayEl.dataset.day)));
             const targetDay = targetWeek.days.find(d => d.day === Number(dayEl.dataset.day));
             targetDay.tasks.push(task);
-            draggedTask = null;
             queueSave();
             render();
-          });
-
-          dayEl.addEventListener("click", (e) => {
-            if(!mobileMoveTaskId) return;
-
-            const clickedInsideTask = e.target.closest(".task");
-            const clickedAddButton = e.target.closest(".day-actions");
-            if(clickedInsideTask || clickedAddButton) return;
-
-            moveTaskToDay(mobileMoveTaskId, Number(dayEl.dataset.day));
           });
 
           dayObj.tasks.forEach((task) => {
@@ -1665,7 +1563,7 @@
 
             const taskEl = document.createElement("div");
             taskEl.className = `task ${task.status}`;
-            taskEl.draggable = !isTouchDevice();
+            taskEl.draggable = true;
 
             taskEl.innerHTML = `
               <div class="task-top">
@@ -1675,7 +1573,6 @@
                   ${task.status === "complete" ? `<span class="badge done">Done</span>` : task.status === "in-progress" ? `<span class="badge">Working on it</span>` : ""}
                 </div>
                 <div class="task-actions">
-                  <button class="btn-move" type="button">Move</button>
                   <select class="subject-edit">
                     <option value="Biology">Biology</option>
                     <option value="Business">Business</option>
@@ -1697,7 +1594,6 @@
             const statusSelect = taskEl.querySelector(".status");
             const subjectSelect = taskEl.querySelector(".subject-edit");
             const deleteBtn = taskEl.querySelector(".btn-delete");
-            const moveBtn = taskEl.querySelector(".btn-move");
             const titleEl = taskEl.querySelector(".task-title");
             const noteEl = taskEl.querySelector(".note");
 
@@ -1713,20 +1609,6 @@
 
             taskEl.addEventListener("dragend", () => {
               taskEl.classList.remove("dragging");
-            });
-
-            moveBtn.addEventListener("click", (e) => {
-              e.stopPropagation();
-
-              if(isTouchDevice()){
-                startMobileMove(task.id, task.title);
-              } else {
-                const dayNumber = prompt("Move to which day? Enter a number from 1 to 35.");
-                const parsed = Number(dayNumber);
-                if(!Number.isNaN(parsed) && parsed >= 1 && parsed <= 35){
-                  moveTaskToDay(task.id, parsed);
-                }
-              }
             });
 
             statusSelect.addEventListener("change", () => {
@@ -1898,7 +1780,6 @@
       document.getElementById("statusFilter").value = "all";
       focusMode = "all";
       localStorage.setItem(FOCUS_KEY, focusMode);
-      cancelMobileMove();
       render();
     });
 
@@ -1911,12 +1792,10 @@
     document.getElementById("exitFocus").addEventListener("click", () => {
       focusMode = "all";
       localStorage.setItem(FOCUS_KEY, focusMode);
-      cancelMobileMove();
       render();
     });
 
     document.getElementById("refreshQuote").addEventListener("click", setRandomQuote);
-    document.getElementById("cancelMobileMove").addEventListener("click", cancelMobileMove);
 
     document.getElementById("currentDaySelect").addEventListener("change", () => {
       const value = document.getElementById("currentDaySelect").value;
