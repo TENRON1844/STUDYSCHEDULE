@@ -166,7 +166,7 @@
 
     .hero-mini{
       display:grid;
-      grid-template-columns:1fr 1fr;
+      grid-template-columns:1fr 1fr 1fr;
       gap:12px;
       margin-top:18px;
     }
@@ -186,6 +186,13 @@
     }
 
     .mini strong{ font-size:1.2rem; }
+
+    .mini select{
+      margin-top:4px;
+      padding:10px 12px;
+      border-radius:12px;
+      font-size:.95rem;
+    }
 
     .stats{
       display:grid;
@@ -728,6 +735,17 @@
       100%{box-shadow:0 0 0 14px rgba(52,211,153,0)}
     }
 
+    .save-status{
+      margin:0 0 16px;
+      text-align:center;
+      color:var(--muted);
+      font-size:.9rem;
+    }
+
+    .save-status strong{
+      color:var(--text);
+    }
+
     .footer{
       margin:20px 0 8px;
       text-align:center;
@@ -769,6 +787,10 @@
             <span>Theme</span>
             <strong id="themeLabel">Dark</strong>
           </div>
+          <div class="mini">
+            <span>Current day</span>
+            <select id="currentDaySelect"></select>
+          </div>
         </div>
       </div>
 
@@ -801,6 +823,8 @@
         </div>
       </div>
     </section>
+
+    <div class="save-status" id="saveStatus">Loading planner…</div>
 
     <section class="top-grid">
       <div class="today-card glass">
@@ -879,7 +903,7 @@
 
     <section id="board" class="board"></section>
 
-    <p class="footer">Tasks, notes, and changes save automatically in your browser.</p>
+    <p class="footer">Planner data is saved locally and synced to your JSONBin cloud record.</p>
   </div>
 
   <script>
@@ -888,6 +912,11 @@
     const THEME_KEY = "studyPlannerThemeV1";
     const FOCUS_KEY = "studyPlannerFocusV1";
     const TIMER_KEY = "studyPlannerTimerV1";
+    const CURRENT_DAY_KEY = "studyPlannerCurrentDayV1";
+
+    const JSONBIN_BIN_ID = "69b285eec3097a1dd51b83af";
+    const JSONBIN_MASTER_KEY = "$2a$10$PeaPGBE14cRgLUaIkPIiG.jN2HB59bZkWC/4KzsS5X.7z0gYG/Vca";
+    const JSONBIN_BASE_URL = "https://api.jsonbin.io/v3/b";
 
     const quotes = [
       "You are building certainty one task at a time.",
@@ -1141,7 +1170,13 @@
       return JSON.parse(JSON.stringify(plan));
     }
 
-    function loadData(){
+    function setSaveStatus(text, strong = false){
+      const el = document.getElementById("saveStatus");
+      if(!el) return;
+      el.innerHTML = strong ? `<strong>${text}</strong>` : text;
+    }
+
+    function loadLocalData(){
       const saved = localStorage.getItem(STORAGE_KEY);
       if(saved){
         try { return JSON.parse(saved); } catch(e){}
@@ -1149,11 +1184,13 @@
       return clonePlan();
     }
 
-    let data = loadData();
+    let data = loadLocalData();
     let draggedTask = null;
     let focusMode = localStorage.getItem(FOCUS_KEY) || "all";
+    let saveTimeout = null;
+    let isSaving = false;
 
-    function saveData(){
+    function saveLocalData(){
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     }
 
@@ -1170,13 +1207,124 @@
       return data.flatMap(w => w.days.flatMap(d => d.tasks));
     }
 
-    function getCurrentStudyDay(){
+    function getAutoStudyDay(){
       const now = new Date();
       const start = new Date("2026-03-24T00:00:00");
       const diffDays = Math.floor((now - start) / (1000 * 60 * 60 * 24)) + 1;
       if (diffDays < 1) return 1;
       if (diffDays > 35) return 35;
       return diffDays;
+    }
+
+    function getCurrentStudyDay(){
+      const override = localStorage.getItem(CURRENT_DAY_KEY) || "auto";
+      if(override !== "auto"){
+        const n = Number(override);
+        if(!Number.isNaN(n) && n >= 1 && n <= 35) return n;
+      }
+      return getAutoStudyDay();
+    }
+
+    function populateCurrentDaySelect(){
+      const select = document.getElementById("currentDaySelect");
+      select.innerHTML = "";
+
+      const autoOption = document.createElement("option");
+      autoOption.value = "auto";
+      autoOption.textContent = `Auto (Day ${getAutoStudyDay()})`;
+      select.appendChild(autoOption);
+
+      for(let i = 1; i <= 35; i++){
+        const option = document.createElement("option");
+        option.value = String(i);
+        option.textContent = `Day ${i}`;
+        select.appendChild(option);
+      }
+
+      select.value = localStorage.getItem(CURRENT_DAY_KEY) || "auto";
+    }
+
+    async function loadCloudData(){
+      try{
+        setSaveStatus("Loading planner from cloud...");
+        const response = await fetch(`${JSONBIN_BASE_URL}/${JSONBIN_BIN_ID}/latest`, {
+          method: "GET",
+          headers: {
+            "X-Master-Key": JSONBIN_MASTER_KEY
+          }
+        });
+
+        if(!response.ok){
+          throw new Error(`Cloud load failed (${response.status})`);
+        }
+
+        const payload = await response.json();
+        const record = payload.record || {};
+
+        if(Array.isArray(record.planner_data) && record.planner_data.length){
+          data = record.planner_data;
+        } else if(Array.isArray(record) && record.length){
+          data = record;
+        }
+
+        if(record.current_day === null || record.current_day === undefined){
+          localStorage.setItem(CURRENT_DAY_KEY, "auto");
+        } else {
+          const n = Number(record.current_day);
+          if(!Number.isNaN(n) && n >= 1 && n <= 35){
+            localStorage.setItem(CURRENT_DAY_KEY, String(n));
+          }
+        }
+
+        saveLocalData();
+        setSaveStatus("Cloud sync loaded.");
+      } catch(err){
+        console.error(err);
+        setSaveStatus("Using local backup. Cloud load failed.");
+      }
+    }
+
+    async function saveCloudData(){
+      if(isSaving) return;
+      isSaving = true;
+      setSaveStatus("Saving...");
+
+      try{
+        const dayOverride = localStorage.getItem(CURRENT_DAY_KEY) || "auto";
+        const payload = {
+          planner_data: data,
+          current_day: dayOverride === "auto" ? null : Number(dayOverride),
+          updated_at: new Date().toISOString()
+        };
+
+        const response = await fetch(`${JSONBIN_BASE_URL}/${JSONBIN_BIN_ID}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Master-Key": JSONBIN_MASTER_KEY
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if(!response.ok){
+          throw new Error(`Cloud save failed (${response.status})`);
+        }
+
+        setSaveStatus("Saved to cloud.");
+      } catch(err){
+        console.error(err);
+        setSaveStatus("Saved locally only. Cloud save failed.");
+      } finally {
+        isSaving = false;
+      }
+    }
+
+    function queueSave(){
+      saveLocalData();
+      clearTimeout(saveTimeout);
+      saveTimeout = setTimeout(() => {
+        saveCloudData();
+      }, 500);
     }
 
     function updateCountdown(){
@@ -1332,7 +1480,7 @@
         status: "not-started",
         note: ""
       });
-      saveData();
+      queueSave();
       render();
     }
 
@@ -1340,7 +1488,7 @@
       const loc = findTaskLocation(taskId);
       if(!loc) return;
       data[loc.wi].days[loc.di].tasks.splice(loc.ti, 1);
-      saveData();
+      queueSave();
       render();
     }
 
@@ -1350,6 +1498,7 @@
       board.innerHTML = "";
 
       const currentStudyDay = getCurrentStudyDay();
+      populateCurrentDaySelect();
 
       data.forEach((weekObj) => {
         if(weekFilter !== "all" && String(weekObj.week) !== weekFilter) return;
@@ -1404,7 +1553,7 @@
             const targetWeek = data.find(w => w.days.some(d => d.day === Number(dayEl.dataset.day)));
             const targetDay = targetWeek.days.find(d => d.day === Number(dayEl.dataset.day));
             targetDay.tasks.push(task);
-            saveData();
+            queueSave();
             render();
           });
 
@@ -1466,7 +1615,7 @@
               const location = findTaskLocation(task.id);
               if(!location) return;
               data[location.wi].days[location.di].tasks[location.ti].status = statusSelect.value;
-              saveData();
+              queueSave();
               render();
             });
 
@@ -1474,7 +1623,7 @@
               const location = findTaskLocation(task.id);
               if(!location) return;
               data[location.wi].days[location.di].tasks[location.ti].subject = subjectSelect.value;
-              saveData();
+              queueSave();
               render();
             });
 
@@ -1486,14 +1635,14 @@
               const location = findTaskLocation(task.id);
               if(!location) return;
               data[location.wi].days[location.di].tasks[location.ti].title = titleEl.textContent.trim();
-              saveData();
+              queueSave();
             });
 
             noteEl.addEventListener("input", () => {
               const location = findTaskLocation(task.id);
               if(!location) return;
               data[location.wi].days[location.di].tasks[location.ti].note = noteEl.textContent.trim();
-              saveData();
+              queueSave();
             });
 
             dayEl.appendChild(taskEl);
@@ -1648,19 +1797,36 @@
 
     document.getElementById("refreshQuote").addEventListener("click", setRandomQuote);
 
-    populateWeekFilter();
-    setRandomQuote();
+    document.getElementById("currentDaySelect").addEventListener("change", () => {
+      const value = document.getElementById("currentDaySelect").value;
+      localStorage.setItem(CURRENT_DAY_KEY, value);
+      queueSave();
+      render();
+    });
 
-    const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
-    document.getElementById("themeSwitch").value = savedTheme;
-    applyTheme(savedTheme);
+    async function init(){
+      populateWeekFilter();
+      populateCurrentDaySelect();
+      setRandomQuote();
 
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
+      const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
+      document.getElementById("themeSwitch").value = savedTheme;
+      applyTheme(savedTheme);
 
-    loadTimerState();
-    updateTimerDisplay();
-    render();
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+
+      loadTimerState();
+      updateTimerDisplay();
+
+      await loadCloudData();
+
+      populateWeekFilter();
+      populateCurrentDaySelect();
+      render();
+    }
+
+    init();
   </script>
 </body>
 </html>
